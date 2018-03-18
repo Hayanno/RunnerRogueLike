@@ -3,22 +3,24 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 
 public class Fader : MonoBehaviour {
-
 	public bool start = false;
 	public float fadeDamp = 0.0f; 
 	public string fadeScene;
 	public float alpha = 0.0f;
 	public Color fadeColor;
 	public bool isFadeIn = false;
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
 
-	void OnGUI () {
-	if (!start)
+    void Awake() {
+        SceneManager.activeSceneChanged += SceneChanged;
+    }
+    void OnDestroy() {
+        SceneManager.activeSceneChanged -= SceneChanged;
+    }
+
+    void OnGUI () {
+	    if (!start)
 			return;
+
 		GUI.color = new Color (GUI.color.r, GUI.color.g, GUI.color.b, alpha);
 
 		Texture2D myTex;
@@ -27,6 +29,7 @@ public class Fader : MonoBehaviour {
 		myTex.Apply ();
 
 		GUI.DrawTexture (new Rect (0, 0, Screen.width, Screen.height), myTex);
+
 		if (isFadeIn)
 			alpha = Mathf.Lerp (alpha, -0.1f, fadeDamp * Time.deltaTime);
 		else
@@ -35,14 +38,12 @@ public class Fader : MonoBehaviour {
 		if (alpha >= 1 && !isFadeIn) {
             SceneManager.LoadScene (fadeScene);		
 			DontDestroyOnLoad(gameObject);		
-		} else
-		if (alpha <= 0 && isFadeIn) {
+		} else if (alpha <= 0 && isFadeIn) {
 			Destroy(gameObject);		
 		}
-
 	}
-	void OnLevelWasLoaded (int level){
+
+	void SceneChanged(Scene previousScene, Scene newScene) {
 		isFadeIn = true;
 	}
-
 }

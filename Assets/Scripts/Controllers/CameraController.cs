@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class SimpleCameraControls : MonoBehaviour {
+public class CameraController : MonoBehaviour {
     public Transform target;
     public Vector2 offset = Vector2.zero;
     public float speed = 10.0f;

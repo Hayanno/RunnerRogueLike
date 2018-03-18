@@ -1,36 +1,23 @@
+﻿using System.Collections;
 using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
 
-public class GameController : MonoBehaviour {
-
+public class UIController : MonoBehaviour {
     public GameObject gameOverPanel;
+    public GameObject newAlert;
     public Text scoreText;
-    int score = 0;
     public Text bestText;
     public Text currentText;
-    public GameObject newAlert;
 
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
-    public void GameOver() {
-        Invoke("ShowOverPanel", 2.0f);
+    public IEnumerator ShowEndPanel(float delayTime, int score) {
+        yield return new WaitForSeconds(delayTime);
+        ShowOverPanel(score);
     }
 
-    void ShowOverPanel() {
+    public void ShowOverPanel(int score) {
         scoreText.gameObject.SetActive(false);
 
-        if (score > PlayerPrefs.GetInt("Best", 0))
-        {
+        if (score > PlayerPrefs.GetInt("Best", 0)) {
             PlayerPrefs.SetInt("Best", score);
             newAlert.SetActive(true);
         }
@@ -41,13 +28,7 @@ public class GameController : MonoBehaviour {
         gameOverPanel.SetActive(true);
     }
 
-    public void Restart() {
-        Initiate.Fade(Application.loadedLevelName,Color.white,2.0f);
-    }
-
-    public void IncrementScore() {
-        score++;
+    public void DisplayScore(int score) {
         scoreText.text = score.ToString();
-    
     }
 }

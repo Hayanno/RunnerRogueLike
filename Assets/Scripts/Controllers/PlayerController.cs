@@ -1,43 +1,40 @@
 using UnityEngine;
 using System.Collections;
 
-public class PlayerScript : MonoBehaviour {
-
-    public float jumpPower = 10.0f;
-    Rigidbody2D myRigidbody;
-    bool isGrounded = false;
-    float posX = 0.0f;
-    bool isGameOver = false;
-    ChallengeController myChallengeController;
-    GameController myGameController;
+public class PlayerController : MonoBehaviour {
     public AudioClip jump;
-    AudioSource myAudioPlayer;
     public AudioClip scoreSFX;
     public AudioClip deadSFX;
 
-    // Use this for initialization
+    public float jumpPower = 10.0f;
+
+    private ChallengeController myChallengeController;
+    private GameController myGameController;
+    private AudioSource myAudioPlayer;
+    private Rigidbody2D myRigidbody;
+
+    private bool isGameOver = false;
+    private bool isGrounded = false;
+    private float posX = 0.0f;
+    
     void Start () {
         myRigidbody = transform.GetComponent<Rigidbody2D>();
         posX = transform.position.x;
-        myChallengeController = GameObject.FindObjectOfType<ChallengeController>();
-        myGameController = GameObject.FindObjectOfType<GameController>();
-        myAudioPlayer = GameObject.FindObjectOfType<AudioSource>();
+        myChallengeController = FindObjectOfType<ChallengeController>();
+        myGameController = FindObjectOfType<GameController>();
+        myAudioPlayer = FindObjectOfType<AudioSource>();
     }
 	
-	
-	void FixedUpdate () {
+	void Update () {
         if (Input.GetKey(KeyCode.Space) && isGrounded && !isGameOver) {
             myRigidbody.AddForce(Vector3.up * (jumpPower * myRigidbody.mass * myRigidbody.gravityScale * 20.0f));
             myAudioPlayer.PlayOneShot(jump);
             isGrounded = false;
         }
-        //Hit in face check
-        if (transform.position.x < posX - 0.1 && !isGameOver) {
-            Debug.Log("lol");
+
+        if (transform.position.x < posX - 0.01 && !isGameOver) {
             GameOver();
         }
-
-
 	}
 
     void GameOver() {
@@ -46,24 +43,14 @@ public class PlayerScript : MonoBehaviour {
         myChallengeController.GameOver();
     }
 
-
-
-    void OnCollisionStay2D(Collision2D other)
-    {
-
-        if (other.collider.tag == "Ground")
-        {
+    void OnCollisionEnter2D(Collision2D other) {
+        if (other.collider.tag == "Ground") {
             isGrounded = true;
         }
-
     }
 
-
-    void OnCollisionExit2D(Collision2D other)
-    {
-
-        if (other.collider.tag == "Ground")
-        {
+    void OnCollisionExit2D(Collision2D other) {
+        if (other.collider.tag == "Ground") {
             isGrounded = false;
         }
 
