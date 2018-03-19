@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour {
-    private int score = 0;
+    private int nbGold = 0;
 
     private UIController myUIController;
     private SpawnController mySpawnController;
@@ -15,15 +15,15 @@ public class GameController : MonoBehaviour {
 
     public void GameOver() {
         mySpawnController.StopScroll();
-        StartCoroutine(myUIController.ShowEndPanel(1f, score));
+        StartCoroutine(myUIController.ShowEndPanel(1f, nbGold));
     }
 
     public void Restart() {
         Initiate.Fade(SceneManager.GetActiveScene().name, Color.white, 2.0f);
     }
 
-    public void IncrementScore() {
-        score++;
-        myUIController.DisplayScore(score);
+    public void IncrementGold(int amount) {
+        nbGold += amount;
+        myUIController.DisplayGold(nbGold);
     }
 }

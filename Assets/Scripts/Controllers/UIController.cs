@@ -4,9 +4,7 @@ using UnityEngine.UI;
 
 public class UIController : MonoBehaviour {
     public GameObject gameOverPanel;
-    public GameObject newAlert;
-    public Text scoreText;
-    public Text bestText;
+    public Text goldText;
     public Text currentText;
 
     public IEnumerator ShowEndPanel(float delayTime, int score) {
@@ -14,21 +12,17 @@ public class UIController : MonoBehaviour {
         ShowOverPanel(score);
     }
 
-    public void ShowOverPanel(int score) {
-        scoreText.gameObject.SetActive(false);
+    public void ShowOverPanel(int gold) {
+        goldText.gameObject.SetActive(false);
 
-        if (score > PlayerPrefs.GetInt("Best", 0)) {
-            PlayerPrefs.SetInt("Best", score);
-            newAlert.SetActive(true);
-        }
-
-        bestText.text = "Best Score : " + PlayerPrefs.GetInt("Best", 0).ToString();
-        currentText.text = "Current Score : " + score.ToString();
+        // Sauvegarder ici les permanents et les golds
+        
+        currentText.text = "Gold : " + gold.ToString();
 
         gameOverPanel.SetActive(true);
     }
 
-    public void DisplayScore(int score) {
-        scoreText.text = score.ToString();
+    public void DisplayGold(int gold) {
+        goldText.text = gold.ToString();
     }
 }

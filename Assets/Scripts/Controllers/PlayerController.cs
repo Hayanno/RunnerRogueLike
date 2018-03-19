@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other) {
         if (other.tag == "Star") {
-            myGameController.IncrementScore();
+            myGameController.IncrementGold(other.gameObject.GetComponent<>());
             myAudioPlayer.PlayOneShot(scoreSFX);
             Destroy(other.gameObject);
         }
