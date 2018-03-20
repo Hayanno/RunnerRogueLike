@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class SpawnObject : MonoBehaviour {
+public class SpawnObject {
     public Transform spawnPoint;
     public int numberOfBlockFirstSpawn;
     public int numberOfBlocksCycle;

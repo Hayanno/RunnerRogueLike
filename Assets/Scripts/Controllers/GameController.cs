@@ -9,6 +9,7 @@ public class GameController : MonoBehaviour {
     private SpawnController mySpawnController;
 
     private void Start() {
+        // Replace Find Object Of Type with tags
         myUIController = FindObjectOfType<UIController>();
         mySpawnController = FindObjectOfType<SpawnController>();
     }
