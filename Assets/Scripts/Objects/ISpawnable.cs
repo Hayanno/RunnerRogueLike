@@ -1,9 +1,7 @@
 using UnityEngine;
-using System.Collections;
 
 public interface ISpawnable {
-    Vector3 GetSpawnPointPosition();
     GameObject GetGameObject();
-
+    int GetSpawnPosition();
     bool ShouldSpawn();
 }

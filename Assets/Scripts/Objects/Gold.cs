@@ -1,18 +1,20 @@
+using UnityEditor;
 using UnityEngine;
-using System.Collections;
 
-public class Gold : BaseObject, ISpawnable, ICollectable {
+public class Gold : SpawnableObject, ICollectable {
     public Gold(int hauteur, int level) : base(hauteur, level) {
         
     }
 
-    public Vector3 GetSpawnPointPosition()
-    {
+    public override GameObject GetGameObject() {
         throw new System.NotImplementedException();
     }
 
-    public bool ShouldSpawn()
-    {
+    public override int GetSpawnPosition() {
+        throw new System.NotImplementedException();
+    }
+
+    public override bool ShouldSpawn() {
         throw new System.NotImplementedException();
     }
 }
