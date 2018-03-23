@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public interface ICollectable {
+public interface ICollectable
+{
 
 }

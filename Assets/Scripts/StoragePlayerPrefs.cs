@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class StoragePlayerPrefs : IStorage {
     public int GetInt(string key, int defaultValue) {
