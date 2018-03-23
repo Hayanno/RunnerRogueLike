@@ -1,8 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class NewMonoBehaviour : MonoBehaviour
-{
+public class Gold : SpawnableObject, ICollectable {
 	// Use this for initialization
 	void Start()
 	{

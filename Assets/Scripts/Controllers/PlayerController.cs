@@ -1,47 +1,35 @@
 using UnityEngine;
-using System.Collections;
 
 public class PlayerController : MonoBehaviour {
-    public AudioClip jump;
-    public AudioClip scoreSFX;
-    public AudioClip deadSFX;
-
     public float jumpPower = 10.0f;
-
-    private ChallengeController myChallengeController;
-    private GameController myGameController;
-    private AudioSource myAudioPlayer;
-    private Rigidbody2D myRigidbody;
-
-    private bool isGameOver = false;
+    
+    private Rigidbody2D rigidBody;
+    private GameController gameController;
+    
     private bool isGrounded = false;
     private float posX = 0.0f;
-    
+    private double deltaPosX = 0.01; // Workaround because Unity fix position with a precision of 0.00(0*?)5 for performance issues
+
     void Start () {
-        myRigidbody = transform.GetComponent<Rigidbody2D>();
+        gameController = FindObjectOfType<GameController>();
+        rigidBody = transform.GetComponent<Rigidbody2D>();
         posX = transform.position.x;
-        myChallengeController = FindObjectOfType<ChallengeController>();
-        myGameController = FindObjectOfType<GameController>();
-        myAudioPlayer = FindObjectOfType<AudioSource>();
     }
 	
 	void Update () {
-        if (Input.GetKey(KeyCode.Space) && isGrounded && !isGameOver) {
-            myRigidbody.AddForce(Vector3.up * (jumpPower * myRigidbody.mass * myRigidbody.gravityScale * 20.0f));
-            myAudioPlayer.PlayOneShot(jump);
+        if (gameController.IsGameOver)
+            return;
+
+        if (Input.GetKey(KeyCode.Space) && isGrounded) {
+            rigidBody.AddForce(Vector3.up * (jumpPower * rigidBody.mass * rigidBody.gravityScale * 20.0f));
+            //myAudioPlayer.PlayOneShot(jump);
             isGrounded = false;
         }
 
-        if (transform.position.x < posX - 0.01 && !isGameOver) {
-            GameOver();
+        if (transform.position.x < posX - deltaPosX) {
+            gameController.GameOver();
         }
 	}
-
-    void GameOver() {
-        isGameOver = true;
-        myAudioPlayer.PlayOneShot(deadSFX);
-        myChallengeController.GameOver();
-    }
 
     void OnCollisionEnter2D(Collision2D other) {
         if (other.collider.tag == "Ground") {
@@ -53,9 +41,9 @@ public class PlayerController : MonoBehaviour {
         if (other.collider.tag == "Ground") {
             isGrounded = false;
         }
-
     }
 
+    /*
     void OnTriggerEnter2D(Collider2D other) {
         if (other.tag == "Star") {
             myGameController.IncrementGold(other.gameObject.GetComponent<>());
@@ -63,4 +51,5 @@ public class PlayerController : MonoBehaviour {
             Destroy(other.gameObject);
         }
     }
+    */
 }

@@ -1,57 +1,48 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnController : MonoBehaviour {
-    public float scrollSpeed = 5.0f;
-    public GameObject[] spawnObjects;
+    [SerializeField]
+    public List<SpawnableObject> spawnableObjects = new List<SpawnableObject>();
+    public Transform spawnPoint;
+    public float frequency = 0.5f;
 
-    private bool isRunning = false;
-
-    void Start() {
-        GenerateSpawnObjects();
-    }
+    private bool isSpawning = false;
+    private float counterFrequency = 0.0f;
+    private int counterBlocks = 0;
 
     void Update() {
-        if (!isRunning) return;
+        if (!isSpawning) return;
 
-        /* GenerateObjects
-        if (counter <= 0.0f) {
-            GenerateRandomChallenge();
+        if (counterFrequency <= 0.0f) {
+            SpawnObjects();
+            counterBlocks++;
         } else {
-            counter -= Time.deltaTime * scrollSpeed;
+            counterFrequency -= Time.deltaTime * frequency;
         }
-        */
     }
 
-    public void StartScroll() {
-        isRunning = true;
-    }
-
-    public void StopScroll() {
-        isRunning = false;
-    }
-
-    private void GenerateSpawnObjects() {
-        int rand = Random.Range(0, spawnObjects.Length);
-        GameObject newChallenge = Instantiate(spawnObjects[rand], spawnObjects[rand].GetComponent<SpawnObject>().GetSpawnPointPosition(), Quaternion.identity) as GameObject;
-        newChallenge.transform.parent = transform;
-    }
-
-    private void ScrollObjects() {
-        GameObject currentChild;
-
-        for (int i = 0; i < transform.childCount; i++) {
-            currentChild = transform.GetChild(i).gameObject;
-            ScrollObject(currentChild);
-
-            if (currentChild.transform.position.x <= -15.0f) {
-                Destroy(currentChild);
+    private void SpawnObjects() {
+        for(int i = 0; i < spawnableObjects.Capacity; i++) {
+            if(spawnableObjects[i].ShouldSpawn(counterBlocks)) {
+                SpawnObject(i);
+                counterBlocks++;
             }
         }
     }
 
-    private void ScrollObject(GameObject go) {
-        go.transform.position -= Vector3.right * (scrollSpeed * Time.deltaTime);
+    private void SpawnObject(int index) {
+        SpawnableObject currSpawnableObject = spawnableObjects[index];
+        Vector3 positionToSpawn = spawnPoint.position + new Vector3(0, currSpawnableObject.spawnPosition, 0);
+
+        Instantiate(currSpawnableObject.gameObject, positionToSpawn, Quaternion.identity, transform);
+    }
+
+    public void StartSpawning() {
+        isSpawning = true;
+    }
+
+    public void StopSpawning() {
+        isSpawning = false;
     }
 }
